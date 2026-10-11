@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VoltFlow | EV Charging Management</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+
+:root{
+  --bg:#09090B;
+  --panel:#18181B;
+  --panel-2:#111113;
+  --border:#2A2A2E;
+  --text:#F4F4F5;
+  --muted:#A1A1AA;
+  --violet:#7C3AED;
+  --violet-2:#A855F7;
+  --violet-light:#C084FC;
+  --green:#22C55E;
+  --amber:#F59E0B;
+  --red:#EF4444;
+  --blue:#3B82F6;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Poppins',sans-serif;
+}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  overflow-x:hidden;
+}
+
+::-webkit-scrollbar{width:8px;height:8px;}
+::-webkit-scrollbar-thumb{background:#2A2A2E;border-radius:10px;}
+::-webkit-scrollbar-track{background:transparent;}
+
+a{ text-decoration:none; }
+button{ font-family:'Poppins',sans-serif; cursor:pointer; }
+
+/* ===================== LOGIN VIEW ===================== */
+
+#login-view{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  position:relative;
+}
+
+#login-view::before{
+  content:'';
+  position:absolute;
+  width:700px;
+  height:700px;
+  background:var(--violet);
+  border-radius:50%;
+  filter:blur(220px);
+  opacity:.25;
+  top:-280px;
+  left:-250px;
+  animation:float1 10s ease-in-out infinite;
+}
+
+#login-view::after{
+  content:'';
+  position:absolute;
+  width:500px;
+  height:500px;
+  background:var(--violet-2);
+  border-radius:50%;
+  filter:blur(180px);
+  opacity:.18;
+  bottom:-180px;
+  right:-120px;
+  animation:float2 12s ease-in-out infinite;
+}
+
+@keyframes float1{
+  0%{transform:translateY(0);}
+  50%{transform:translateY(35px);}
+  100%{transform:translateY(0);}
+}
+
+@keyframes float2{
+  0%{transform:translateY(0);}
+  50%{transform:translateY(-35px);}
+  100%{transform:translateY(0);}
+}
+
+.login-container{
+  display:flex;
+  width:1100px;
+  max-width:94vw;
+  height:650px;
+  max-height:92vh;
+  background:rgba(24,24,27,.92);
+  backdrop-filter:blur(18px);
+  border-radius:28px;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.06);
+  box-shadow:0 25px 80px rgba(0,0,0,.75), 0 0 50px rgba(124,58,237,.15);
+  position:relative;
+  z-index:10;
+}
+
+.login-left{
+  flex:1;
+  background:linear-gradient(135deg,#4C1D95,#6D28D9,#9333EA);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  color:white;
+  padding:40px;
+  text-align:center;
+}
+
+.login-left .icon{
+  font-size:110px;
+  margin-bottom:25px;
+  animation:pulse 2.5s infinite;
+}
+
+@keyframes pulse{
+  0%{transform:scale(1);}
+  50%{transform:scale(1.08);}
+  100%{transform:scale(1);}
+}
+
+.login-left h1{
+  font-size:54px;
+  font-weight:700;
+  letter-spacing:2px;
+}
+
+.login-left h2{
+  margin-top:12px;
+  font-weight:300;
+  font-size:19px;
+  opacity:.9;
+}
+
+.login-left p{
+  margin-top:18px;
+  font-size:14px;
+  opacity:.8;
+  max-width:320px;
+}
+
+.login-right{
+  flex:1;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:#111113;
+}
+
+.login-card{
+  width:400px;
+  max-width:85%;
+  padding:20px;
+}
+
+.login-card h2{
+  font-size:32px;
+  margin-bottom:8px;
+}
+
+.login-card p{
+  color:var(--muted);
+  margin-bottom:30px;
+  line-height:1.6;
+}
+
+.field{ margin-bottom:18px; }
+
+.field input{
+  width:100%;
+  padding:16px;
+  border-radius:12px;
+  background:#27272A;
+  border:1px solid #3F3F46;
+  color:white;
+  font-size:15px;
+  outline:none;
+  transition:.3s;
+}
+
+.field input::placeholder{ color:var(--muted); }
+
+.field input:focus{
+  border-color:var(--violet-2);
+  box-shadow:0 0 20px rgba(168,85,247,.4);
+}
+
+.options{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin:14px 0 26px;
+  color:#C4B5FD;
+  font-size:13px;
+}
+
+.options input{ accent-color:var(--violet-2); }
+
+.options a, .login-footer a{ color:var(--violet-light); }
+.options a:hover, .login-footer a:hover{ color:white; }
+
+.login-btn{
+  width:100%;
+  padding:16px;
+  border:none;
+  border-radius:14px;
+  background:linear-gradient(135deg,var(--violet),var(--violet-2));
+  color:white;
+  font-size:17px;
+  font-weight:600;
+  box-shadow:0 10px 30px rgba(124,58,237,.35);
+  transition:.35s;
+}
+
+.login-btn:hover{
+  transform:translateY(-4px);
+  box-shadow:0 20px 40px rgba(124,58,237,.45);
+}
+
+.login-footer{
+  margin-top:24px;
+  text-align:center;
+  color:var(--muted);
+  font-size:14px;
+}
+
+.login-footer a{ font-weight:600; }
+
+/* ===================== APP SHELL ===================== */
+
+#app-view{
+  display:none;
+  height:100vh;
+  overflow:hidden;
+}
+
+.app-shell{
+  display:flex;
+  height:100vh;
+}
+
+/* Sidebar */
+
+.sidebar{
+  width:250px;
+  flex-shrink:0;
+  background:var(--panel-2);
+  border-right:1px solid var(--border);
+  display:flex;
+  flex-direction:column;
+  padding:28px 18px;
+  overflow-y:auto;
+}
+
+.logo{
+  font-size:26px;
+  font-weight:700;
+  color:var(--violet-light);
+  margin-bottom:36px;
+  letter-spacing:2px;
+  padding:0 8px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.menu{ list-style:none; flex:1; }
+
+.menu li{ margin:6px 0; }
+
+.menu a{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:13px 16px;
+  text-decoration:none;
+  color:var(--muted);
+  border-radius:12px;
+  transition:.25s;
+  font-size:14.5px;
+  cursor:pointer;
+}
+
+.menu a i{ width:18px; text-align:center; }
+
+.menu a:hover{ background:#1E1E22; color:white; }
+
+.menu a.active{
+  background:linear-gradient(135deg,var(--violet),var(--violet-2));
+  color:white;
+  box-shadow:0 6px 18px rgba(124,58,237,.35);
+}
+
+.sidebar-footer{
+  border-top:1px solid var(--border);
+  padding-top:16px;
+  margin-top:16px;
+}
+
+.logout-link{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:13px 16px;
+  color:var(--muted);
+  border-radius:12px;
+  transition:.25s;
+  font-size:14.5px;
+  cursor:pointer;
+}
+
+.logout-link:hover{ background:#1E1E22; color:var(--red); }
+
+/* Main */
+
+.main{
+  flex:1;
+  padding:32px 36px;
+  overflow-y:auto;
+}
+
+.view-section{ display:none; animation:fadeIn .35s ease; }
+.view-section.active{ display:block; }
+
+@keyframes fadeIn{
+  from{ opacity:0; transform:translateY(8px); }
+  to{ opacity:1; transform:translateY(0); }
+}
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:30px;
+  gap:20px;
+  flex-wrap:wrap;
+}
+
+.page-title{
+  font-size:26px;
+  font-weight:600;
+}
+
+.page-title span{
+  display:block;
+  font-size:13px;
+  font-weight:400;
+  color:var(--muted);
+  margin-top:4px;
+}
+
+.topbar-actions{
+  display:flex;
+  align-items:center;
+  gap:16px;
+}
+
+.search-box{
+  width:280px;
+  padding:12px 16px;
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:12px;
+  color:var(--muted);
+  font-size:14px;
+  outline:none;
+}
+
+.search-box:focus{ border-color:var(--violet-2); }
+
+.btn{
+  padding:12px 22px;
+  border:none;
+  border-radius:12px;
+  color:white;
+  font-size:14px;
+  font-weight:600;
+  transition:.3s;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+}
+
+.btn-primary{ background:linear-gradient(135deg,var(--violet),var(--violet-2)); }
+.btn-primary:hover{ transform:translateY(-3px); box-shadow:0 0 25px rgba(168,85,247,.4); }
+
+.btn-ghost{ background:#27272A; }
+.btn-ghost:hover{ transform:translateY(-3px); }
+
+.profile{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.avatar{
+  width:42px;
+  height:42px;
+  background:linear-gradient(135deg,var(--violet),var(--violet-2));
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+  flex-shrink:0;
+}
+
+.profile small{ display:block; color:var(--muted); font-size:12px; }
+
+/* Stat cards */
+
+.stat-cards{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:20px;
+  margin-bottom:30px;
+}
+
+.stat-card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  padding:24px;
+  border-radius:18px;
+  transition:.3s;
+}
+
+.stat-card:hover{
+  transform:translateY(-6px);
+  box-shadow:0 0 30px rgba(124,58,237,.25);
+}
+
+.stat-card i{
+  font-size:26px;
+  color:var(--violet-2);
+  margin-bottom:14px;
+  display:block;
+}
+
+.stat-card h2{ font-size:28px; margin:8px 0 4px; }
+.stat-card p{ color:var(--muted); font-size:13.5px; }
+.stat-card .delta{ color:var(--green); font-size:12.5px; margin-top:6px; }
+
+/* Panels */
+
+.content-grid{
+  display:grid;
+  grid-template-columns:2fr 1fr;
+  gap:20px;
+}
+
+.panel{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:24px;
+  margin-bottom:20px;
+}
+
+.panel h3{
+  margin-bottom:18px;
+  color:var(--violet-light);
+  font-size:16px;
+}
+
+.chart-placeholder{
+  height:260px;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  justify-content:center;
+  align-items:center;
+  color:#666;
+  border:2px dashed #333;
+  border-radius:12px;
+  font-size:14px;
+  text-align:center;
+}
+
+.station-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:14px 0;
+  border-bottom:1px solid var(--border);
+}
+
+.station-row:last-child{ border-bottom:none; }
+
+/* Tables */
+
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+th, td{
+  padding:14px;
+  text-align:left;
+  font-size:14px;
+}
+
+th{
+  color:var(--violet-light);
+  font-weight:600;
+  border-bottom:1px solid var(--border);
+}
+
+td{ border-bottom:1px solid var(--border); color:#E4E4E7; }
+
+tr:last-child td{ border-bottom:none; }
+
+tr:hover td{ background:#1D1D21; }
+
+/* Status pill */
+
+.pill{
+  display:inline-block;
+  padding:6px 14px;
+  border-radius:30px;
+  font-size:12.5px;
+  font-weight:600;
+  color:white;
+}
+
+.pill.online, .pill.paid, .pill.confirmed, .pill.completed{ background:var(--green); }
+.pill.busy, .pill.pending, .pill.reserved{ background:var(--amber); }
+.pill.maintenance, .pill.offline, .pill.cancelled{ background:var(--red); }
+.pill.charging, .pill.scheduled, .pill.waiting{ background:var(--blue); }
+
+/* Station cards (Stations view) */
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  gap:22px;
+  margin-bottom:28px;
+}
+
+.station-card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:24px;
+  transition:.35s;
+  position:relative;
+  overflow:hidden;
+}
+
+.station-card:hover{
+  transform:translateY(-8px);
+  box-shadow:0 0 35px rgba(124,58,237,.35);
+}
+
+.station-card::before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:0;
+  height:5px;
+  width:100%;
+  background:linear-gradient(90deg,var(--violet),var(--violet-2));
+}
+
+.station-icon{
+  width:62px;
+  height:62px;
+  background:rgba(124,58,237,.18);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  border-radius:16px;
+  font-size:26px;
+  color:var(--violet-light);
+  margin-bottom:18px;
+}
+
+.station-card h2{ font-size:21px; margin-bottom:6px; }
+
+.station-card .location{
+  color:var(--muted);
+  margin-bottom:18px;
+  font-size:13.5px;
+}
+
+.station-info{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:16px;
+}
+
+.station-info div{ text-align:center; }
+.station-info h3{ font-size:20px; }
+.station-info p{ font-size:12px; color:var(--muted); }
+
+.card-buttons{ display:flex; gap:10px; margin-top:16px; }
+
+.card-buttons button{
+  flex:1;
+  padding:11px;
+  border:none;
+  border-radius:10px;
+  font-weight:600;
+  font-size:13.5px;
+  color:white;
+  transition:.3s;
+}
+
+.card-buttons .view-btn{ background:var(--violet); }
+.card-buttons .reserve-btn{ background:#27272A; }
+.card-buttons button:hover{ transform:translateY(-3px); }
+
+.mini-stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:18px;
+}
+
+.mini-stat{
+  background:var(--panel);
+  padding:22px;
+  border-radius:16px;
+  border:1px solid var(--border);
+  text-align:center;
+}
+
+.mini-stat h1{ font-size:30px; margin-bottom:4px; }
+.mini-stat p{ color:var(--muted); font-size:13px; }
+
+/* Forms */
+
+.form-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:18px;
+  background:var(--panel);
+  border:1px solid var(--border);
+  padding:24px;
+  border-radius:18px;
+  margin-bottom:24px;
+}
+
+.form-group{ display:flex; flex-direction:column; }
+.form-group.full{ grid-column:1/3; }
+.form-group.end{ justify-content:end; }
+
+.form-group label{
+  margin-bottom:8px;
+  font-weight:600;
+  font-size:13.5px;
+  color:var(--muted);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea{
+  padding:12px 14px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:#0F0F11;
+  color:white;
+  font-size:14px;
+  outline:none;
+  font-family:'Poppins',sans-serif;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{
+  border-color:var(--violet-2);
+}
+
+.form-group textarea{ height:90px; resize:none; }
+
+.form-submit{
+  padding:12px 22px;
+  border:none;
+  border-radius:10px;
+  background:linear-gradient(135deg,var(--violet),var(--violet-2));
+  color:white;
+  font-weight:600;
+  font-size:14px;
+}
+
+.form-submit:hover{ transform:translateY(-3px); box-shadow:0 0 20px rgba(168,85,247,.35); }
+
+.table-wrap{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:8px 24px;
+  overflow-x:auto;
+  margin-bottom:10px;
+}
+
+/* Reports */
+
+.report-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+  margin-bottom:24px;
+}
+
+.report{
+  background:var(--panel);
+  border:1px solid var(--border);
+  padding:24px;
+  border-radius:18px;
+}
+
+.report h3{ color:var(--muted); font-size:14px; margin-bottom:10px; }
+.report h1{ font-size:28px; color:var(--violet-light); }
+
+.report-chart{
+  margin-top:18px;
+  height:140px;
+  border-radius:12px;
+  background:linear-gradient(135deg,#4C1D95,#A855F7);
+  opacity:.85;
+}
+
+/* Settings */
+
+.settings-list{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:8px 24px;
+}
+
+.settings-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px 0;
+  border-bottom:1px solid var(--border);
+}
+
+.settings-row:last-child{ border-bottom:none; }
+
+.settings-row div p:first-child{ font-weight:600; margin-bottom:4px; }
+.settings-row div p:last-child{ color:var(--muted); font-size:13px; }
+
+.toggle{
+  width:46px;
+  height:26px;
+  background:#27272A;
+  border-radius:20px;
+  position:relative;
+  cursor:pointer;
+  transition:.3s;
+}
+
+.toggle.on{ background:var(--violet); }
+
+.toggle::after{
+  content:'';
+  position:absolute;
+  width:20px;
+  height:20px;
+  background:white;
+  border-radius:50%;
+  top:3px;
+  left:3px;
+  transition:.3s;
+}
+
+.toggle.on::after{ left:23px; }
+
+section-label{ color:var(--violet-light); }
+
+.section-heading{
+  font-size:18px;
+  color:var(--violet-light);
+  margin:8px 0 16px;
+}
+
+@media(max-width:1000px){
+  .stat-cards, .mini-stats{ grid-template-columns:repeat(2,1fr); }
+  .content-grid{ grid-template-columns:1fr; }
+  .form-grid{ grid-template-columns:1fr; }
+  .report-grid{ grid-template-columns:1fr; }
+  .form-group.full{ grid-column:1; }
+}
+
+@media(max-width:700px){
+  .sidebar{ display:none; }
+  .main{ padding:22px; }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- ===================== LOGIN VIEW ===================== -->
+
+<div id="login-view">
+  <div class="login-container">
+    <div class="login-left">
+      <div class="icon">⚡</div>
+      <h1>VoltFlow</h1>
+      <h2>Smart EV Charging Platform</h2>
+      <p>Powering the next generation of electric mobility with intelligent, fast and reliable charging infrastructure.</p>
+    </div>
+
+    <div class="login-right">
+      <div class="login-card">
+        <h2>Welcome Back</h2>
+        <p>Login to continue managing your charging stations.</p>
+
+        <div class="field"><input type="text" placeholder="Username" value="admin"></div>
+        <div class="field"><input type="password" placeholder="Password" value="••••••••"></div>
+
+        <div class="options">
+          <label><input type="checkbox"> Remember Me</label>
+          <a href="#">Forgot Password?</a>
+        </div>
+
+        <button class="login-btn" onclick="goToApp()">Login</button>
+
+        <div class="login-footer">Don't have an account? <a href="#">Register</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== APP VIEW ===================== -->
+
+<div id="app-view">
+<div class="app-shell">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="logo">⚡ VOLTFLOW</div>
+
+    <ul class="menu">
+      <li><a class="active" data-target="dashboard" onclick="showView('dashboard', this)"><i class="fa-solid fa-chart-line"></i>Dashboard</a></li>
+      <li><a data-target="stations" onclick="showView('stations', this)"><i class="fa-solid fa-charging-station"></i>Stations</a></li>
+      <li><a data-target="reservations" onclick="showView('reservations', this)"><i class="fa-solid fa-calendar"></i>Reservations</a></li>
+      <li><a data-target="charging" onclick="showView('charging', this)"><i class="fa-solid fa-bolt"></i>Charging</a></li>
+      <li><a data-target="payments" onclick="showView('payments', this)"><i class="fa-solid fa-credit-card"></i>Payments</a></li>
+      <li><a data-target="maintenance" onclick="showView('maintenance', this)"><i class="fa-solid fa-screwdriver-wrench"></i>Maintenance</a></li>
+      <li><a data-target="reports" onclick="showView('reports', this)"><i class="fa-solid fa-chart-pie"></i>Reports</a></li>
+      <li><a data-target="settings" onclick="showView('settings', this)"><i class="fa-solid fa-gear"></i>Settings</a></li>
+    </ul>
+
+    <div class="sidebar-footer">
+      <div class="logout-link" onclick="goToLogin()"><i class="fa-solid fa-right-from-bracket"></i>Logout</div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- DASHBOARD -->
+    <section id="view-dashboard" class="view-section active">
+      <div class="topbar">
+        <div class="page-title">Dashboard<span>Live overview of your charging network</span></div>
+        <div class="topbar-actions">
+          <input class="search-box" placeholder="🔍 Search stations...">
+          <div class="profile">
+            <div class="avatar">A</div>
+            <div><b>Admin</b><small>System Administrator</small></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-cards">
+        <div class="stat-card"><i class="fa-solid fa-indian-rupee-sign"></i><p>Today's Revenue</p><h2>₹42,850</h2><p class="delta">+12% Today</p></div>
+        <div class="stat-card"><i class="fa-solid fa-bolt"></i><p>Active Sessions</p><h2>27</h2><p class="delta">Charging Now</p></div>
+        <div class="stat-card"><i class="fa-solid fa-plug-circle-check"></i><p>Available Chargers</p><h2>48</h2><p class="delta">Online</p></div>
+        <div class="stat-card"><i class="fa-solid fa-leaf"></i><p>Energy Delivered</p><h2>1350 kWh</h2><p class="delta">Today's Usage</p></div>
+      </div>
+
+      <div class="content-grid">
+        <div class="panel">
+          <h3>Revenue Analytics</h3>
+          <div class="chart-placeholder">📈<br>Graph will be added here using Chart.js</div>
+          <table>
+            <tr><th>Vehicle</th><th>Station</th><th>Status</th></tr>
+            <tr><td>KL07AB1234</td><td>Thrissur</td><td style="color:var(--green);">Charging</td></tr>
+            <tr><td>KL08XY4455</td><td>Kochi</td><td style="color:var(--amber);">Reserved</td></tr>
+            <tr><td>KL60EV0001</td><td>Calicut</td><td style="color:var(--blue);">Completed</td></tr>
+          </table>
+        </div>
+
+        <div class="panel">
+          <h3>Station Status</h3>
+          <div class="station-row"><div><b>Thrissur Hub</b><br><small style="color:var(--muted);">8 Chargers</small></div><div class="pill online">Online</div></div>
+          <div class="station-row"><div><b>Kochi Central</b><br><small style="color:var(--muted);">12 Chargers</small></div><div class="pill busy">Busy</div></div>
+          <div class="station-row"><div><b>Calicut FastCharge</b><br><small style="color:var(--muted);">6 Chargers</small></div><div class="pill maintenance">Maintenance</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STATIONS -->
+    <section id="view-stations" class="view-section">
+      <div class="topbar">
+        <div class="page-title">Stations<span>Manage every charging location on your network</span></div>
+        <div class="topbar-actions">
+          <input class="search-box" id="station-search" placeholder="🔍 Search charging station...">
+          <button class="btn btn-primary"><i class="fa-solid fa-plus"></i>Add Station</button>
+        </div>
+      </div>
+
+      <div class="grid" id="station-grid">
+        <div class="station-card">
+          <div class="station-icon"><i class="fa-solid fa-bolt"></i></div>
+          <h2>Thrissur Central Hub</h2>
+          <p class="location">📍 Thrissur, Kerala</p>
+          <div class="station-info"><div><h3>12</h3><p>Total</p></div><div><h3>8</h3><p>Available</p></div><div><h3>4</h3><p>Busy</p></div></div>
+          <div class="pill online">🟢 Online</div>
+          <div class="card-buttons"><button class="view-btn" onclick="alert('Station details will be displayed here.')">View</button><button class="reserve-btn" onclick="alert('Reservation feature coming soon!')">Reserve</button></div>
+        </div>
+
+        <div class="station-card">
+          <div class="station-icon"><i class="fa-solid fa-plug-circle-bolt"></i></div>
+          <h2>Kochi Fast Charge</h2>
+          <p class="location">📍 Kochi, Kerala</p>
+          <div class="station-info"><div><h3>20</h3><p>Total</p></div><div><h3>3</h3><p>Available</p></div><div><h3>17</h3><p>Busy</p></div></div>
+          <div class="pill busy">🟡 Busy</div>
+          <div class="card-buttons"><button class="view-btn" onclick="alert('Station details will be displayed here.')">View</button><button class="reserve-btn" onclick="alert('Reservation feature coming soon!')">Reserve</button></div>
+        </div>
+
+        <div class="station-card">
+          <div class="station-icon"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+          <h2>Calicut EV Point</h2>
+          <p class="location">📍 Kozhikode, Kerala</p>
+          <div class="station-info"><div><h3>10</h3><p>Total</p></div><div><h3>0</h3><p>Available</p></div><div><h3>10</h3><p>Busy</p></div></div>
+          <div class="pill maintenance">🔴 Maintenance</div>
+          <div class="card-buttons"><button class="view-btn" onclick="alert('Station details will be displayed here.')">View</button><button class="reserve-btn" onclick="alert('Reservation feature coming soon!')">Reserve</button></div>
+        </div>
+
+        <div class="station-card">
+          <div class="station-icon"><i class="fa-solid fa-charging-station"></i></div>
+          <h2>Trivandrum SuperCharge</h2>
+          <p class="location">📍 Thiruvananthapuram, Kerala</p>
+          <div class="station-info"><div><h3>16</h3><p>Total</p></div><div><h3>9</h3><p>Available</p></div><div><h3>7</h3><p>Busy</p></div></div>
+          <div class="pill online">🟢 Online</div>
+          <div class="card-buttons"><button class="view-btn" onclick="alert('Station details will be displayed here.')">View</button><button class="reserve-btn" onclick="alert('Reservation feature coming soon!')">Reserve</button></div>
+        </div>
+
+        <div class="station-card">
+          <div class="station-icon"><i class="fa-solid fa-bolt"></i></div>
+          <h2>Palakkad EV Zone</h2>
+          <p class="location">📍 Palakkad, Kerala</p>
+          <div class="station-info"><div><h3>14</h3><p>Total</p></div><div><h3>6</h3><p>Available</p></div><div><h3>8</h3><p>Busy</p></div></div>
+          <div class="pill busy">🟡 Busy</div>
+          <div class="card-buttons"><button class="view-btn" onclick="alert('Station details will be displayed here.')">View</button><button class="reserve-btn" onclick="alert('Reservation feature coming soon!')">Reserve</button></div>
+        </div>
+
+        <div class="station-card">
+          <div class="station-icon"><i class="fa-solid fa-plug-circle-check"></i></div>
+          <h2>Kannur GreenCharge</h2>
+          <p class="location">📍 Kannur, Kerala</p>
+          <div class="station-info"><div><h3>18</h3><p>Total</p></div><div><h3>18</h3><p>Available</p></div><div><h3>0</h3><p>Busy</p></div></div>
+          <div class="pill online">🟢 Online</div>
+          <div class="card-buttons"><button class="view-btn" onclick="alert('Station details will be displayed here.')">View</button><button class="reserve-btn" onclick="alert('Reservation feature coming soon!')">Reserve</button></div>
+        </div>
+      </div>
+
+      <div class="mini-stats">
+        <div class="mini-stat"><h1 style="color:var(--violet-2);">90</h1><p>Total Chargers</p></div>
+        <div class="mini-stat"><h1 style="color:var(--green);">44</h1><p>Available</p></div>
+        <div class="mini-stat"><h1 style="color:var(--amber);">36</h1><p>Occupied</p></div>
+        <div class="mini-stat"><h1 style="color:var(--red);">10</h1><p>Maintenance</p></div>
+      </div>
+    </section>
+
+    <!-- RESERVATIONS -->
+    <section id="view-reservations" class="view-section">
+      <div class="topbar">
+        <div class="page-title">Reservations<span>Book and track charging slots</span></div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group"><label>User Name</label><input type="text" placeholder="e.g. Rahul"></div>
+        <div class="form-group"><label>Vehicle Number</label><input type="text" placeholder="KL-01-AA-1001"></div>
+        <div class="form-group"><label>Charging Station</label>
+          <select><option>Thrissur Central Hub</option><option>Kochi Fast Charge</option><option>Trivandrum SuperCharge</option></select>
+        </div>
+        <div class="form-group"><label>Slot Time</label><input type="datetime-local"></div>
+        <div class="form-group full"><label>Remarks</label><textarea placeholder="Optional notes..."></textarea></div>
+        <div class="form-group end"><button class="form-submit" onclick="alert('Reservation created!')">Create Reservation</button></div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <tr><th>ID</th><th>User</th><th>Vehicle</th><th>Station</th><th>Time</th><th>Status</th></tr>
+          <tr><td>R101</td><td>Rahul</td><td>KL-01-AA-1001</td><td>Thrissur Central Hub</td><td>10:00 AM</td><td><span class="pill confirmed">Confirmed</span></td></tr>
+          <tr><td>R102</td><td>Anjali</td><td>KL-07-BB-2475</td><td>Kochi Fast Charge</td><td>12:30 PM</td><td><span class="pill pending">Pending</span></td></tr>
+          <tr><td>R103</td><td>John</td><td>TN-09-CD-1122</td><td>Calicut EV Point</td><td>3:15 PM</td><td><span class="pill cancelled">Cancelled</span></td></tr>
+        </table>
+      </div>
+    </section>
+
+    <!-- CHARGING -->
+    <section id="view-charging" class="view-section">
+      <div class="topbar">
+        <div class="page-title">Charging Sessions<span>Monitor active and completed sessions</span></div>
+      </div>
+
+      <div class="stat-cards">
+        <div class="stat-card"><i class="fa-solid fa-bolt"></i><p>Active Sessions</p><h2>27</h2></div>
+        <div class="stat-card"><i class="fa-solid fa-battery-full"></i><p>Completed Today</p><h2>63</h2></div>
+        <div class="stat-card"><i class="fa-solid fa-leaf"></i><p>Energy Delivered</p><h2>1350 kWh</h2></div>
+        <div class="stat-card"><i class="fa-solid fa-hourglass-half"></i><p>Avg Duration</p><h2>38 min</h2></div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <tr><th>Session ID</th><th>User</th><th>Station</th><th>Energy (kWh)</th><th>Duration</th><th>Status</th></tr>
+          <tr><td>CS201</td><td>Rahul</td><td>Thrissur Central Hub</td><td>24.5</td><td>45 mins</td><td><span class="pill completed">Completed</span></td></tr>
+          <tr><td>CS202</td><td>Anjali</td><td>Kochi Fast Charge</td><td>18.2</td><td>32 mins</td><td><span class="pill charging">Charging</span></td></tr>
+          <tr><td>CS203</td><td>John</td><td>Calicut EV Point</td><td>0</td><td>--</td><td><span class="pill waiting">Waiting</span></td></tr>
+          <tr><td>CS204</td><td>Neha</td><td>Palakkad EV Zone</td><td>30.8</td><td>1 hr</td><td><span class="pill completed">Completed</span></td></tr>
+        </table>
+      </div>
+    </section>
+
+    <!-- PAYMENTS -->
+    <section id="view-payments" class="view-section">
+      <div class="topbar">
+        <div class="page-title">Payments<span>Track transactions across your network</span></div>
+      </div>
+
+      <div class="stat-cards">
+        <div class="stat-card"><i class="fa-solid fa-indian-rupee-sign"></i><p>Total Revenue</p><h2>₹8,42,500</h2></div>
+        <div class="stat-card"><i class="fa-solid fa-circle-check"></i><p>Paid Today</p><h2>₹2,395</h2></div>
+        <div class="stat-card"><i class="fa-solid fa-clock"></i><p>Pending</p><h2>₹780</h2></div>
+        <div class="stat-card"><i class="fa-solid fa-wallet"></i><p>Transactions</p><h2>504</h2></div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <tr><th>Payment ID</th><th>User</th><th>Amount</th><th>Method</th><th>Date</th><th>Status</th></tr>
+          <tr><td>P501</td><td>Rahul</td><td>₹640</td><td>UPI</td><td>05 Aug 2026</td><td><span class="pill paid">Paid</span></td></tr>
+          <tr><td>P502</td><td>Anjali</td><td>₹520</td><td>Credit Card</td><td>05 Aug 2026</td><td><span class="pill paid">Paid</span></td></tr>
+          <tr><td>P503</td><td>John</td><td>₹780</td><td>Wallet</td><td>04 Aug 2026</td><td><span class="pill pending">Pending</span></td></tr>
+          <tr><td>P504</td><td>Neha</td><td>₹455</td><td>Cash</td><td>04 Aug 2026</td><td><span class="pill paid">Paid</span></td></tr>
+        </table>
+      </div>
+    </section>
+
+    <!-- MAINTENANCE -->
+    <section id="view-maintenance" class="view-section">
+      <div class="topbar">
+        <div class="page-title">Maintenance<span>Schedule and track technician visits</span></div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group"><label>Station Name</label><input type="text" placeholder="Thrissur Central Hub"></div>
+        <div class="form-group"><label>Assigned Technician</label><input type="text" placeholder="Technician name"></div>
+        <div class="form-group"><label>Maintenance Date</label><input type="date"></div>
+        <div class="form-group"><label>Priority</label><select><option>Low</option><option>Medium</option><option>High</option></select></div>
+        <div class="form-group full"><label>Description</label><textarea placeholder="Describe the issue..."></textarea></div>
+        <div class="form-group end"><button class="form-submit" onclick="alert('Maintenance scheduled!')">Schedule Maintenance</button></div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <tr><th>Station</th><th>Technician</th><th>Date</th><th>Status</th></tr>
+          <tr><td>Thrissur Central Hub</td><td>Akash</td><td>07 Aug</td><td><span class="pill scheduled">Scheduled</span></td></tr>
+          <tr><td>Calicut EV Point</td><td>Rohan</td><td>06 Aug</td><td><span class="pill completed">Completed</span></td></tr>
+          <tr><td>Palakkad EV Zone</td><td>Anand</td><td>08 Aug</td><td><span class="pill pending">Pending</span></td></tr>
+        </table>
+      </div>
+    </section>
+
+    <!-- REPORTS -->
+    <section id="view-reports" class="view-section">
+      <div class="topbar">
+        <div class="page-title">Reports<span>Network performance at a glance</span></div>
+      </div>
+
+      <div class="report-grid">
+        <div class="report"><h3>Total Revenue</h3><h1>₹8,42,500</h1><div class="report-chart"></div></div>
+        <div class="report"><h3>Energy Consumption</h3><h1>12,850 kWh</h1><div class="report-chart"></div></div>
+        <div class="report"><h3>Peak Utilization</h3><h1>94%</h1><div class="report-chart"></div></div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <tr><th>Month</th><th>Reservations</th><th>Sessions</th><th>Revenue</th></tr>
+          <tr><td>May</td><td>210</td><td>190</td><td>₹1,42,000</td></tr>
+          <tr><td>June</td><td>258</td><td>244</td><td>₹1,81,000</td></tr>
+          <tr><td>July</td><td>301</td><td>286</td><td>₹2,15,000</td></tr>
+          <tr><td>August</td><td>337</td><td>320</td><td>₹2,48,000</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section id="view-settings" class="view-section">
+      <div class="topbar">
+        <div class="page-title">Settings<span>Manage your account and preferences</span></div>
+      </div>
+
+      <div class="settings-list">
+        <div class="settings-row">
+          <div><p>Email Notifications</p><p>Get notified about reservations and payments</p></div>
+          <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+        </div>
+        <div class="settings-row">
+          <div><p>SMS Alerts</p><p>Receive text alerts for critical station issues</p></div>
+          <div class="toggle" onclick="this.classList.toggle('on')"></div>
+        </div>
+        <div class="settings-row">
+          <div><p>Dark Mode</p><p>VoltFlow's signature dark interface</p></div>
+          <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+        </div>
+        <div class="settings-row">
+          <div><p>Two-Factor Authentication</p><p>Add an extra layer of security to your account</p></div>
+          <div class="toggle" onclick="this.classList.toggle('on')"></div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+</div>
+
+<script>
+
+function goToApp(){
+  document.getElementById('login-view').style.display = 'none';
+  document.getElementById('app-view').style.display = 'block';
+}
+
+function goToLogin(){
+  document.getElementById('app-view').style.display = 'none';
+  document.getElementById('login-view').style.display = 'flex';
+}
+
+function showView(name, linkEl){
+  document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+
+  document.querySelectorAll('.menu a').forEach(a => a.classList.remove('active'));
+  linkEl.classList.add('active');
+
+  document.querySelector('.main').scrollTo(0,0);
+}
+
+// Station search (Stations view)
+const stationSearch = document.getElementById('station-search');
+if(stationSearch){
+  stationSearch.addEventListener('keyup', () => {
+    const value = stationSearch.value.toLowerCase();
+    document.querySelectorAll('#station-grid .station-card').forEach(card => {
+      const text = card.innerText.toLowerCase();
+      card.style.display = text.includes(value) ? 'block' : 'none';
+    });
+  });
+}
+
+</script>
+
+</body>
+</html>

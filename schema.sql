@@ -1,0 +1,15 @@
+-- VoltFlow SQL schema (SQLite-compatible SQL). app.py executes this schema on startup.
+-- Tables: users, vehicles, charging_stations, chargers, reservations,
+-- charging_sessions, payments, maintenance_records.
+PRAGMA foreign_keys = ON;
+CREATE TABLE users (user_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, email TEXT NOT NULL UNIQUE, password_hash TEXT NOT NULL, role TEXT NOT NULL CHECK(role IN ('Admin','Station Operator','Maintenance Staff','EV Owner')), phone TEXT, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE vehicles (vehicle_no TEXT PRIMARY KEY, model TEXT NOT NULL, user_id INTEGER NOT NULL REFERENCES users(user_id) ON DELETE CASCADE);
+CREATE TABLE charging_stations (station_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, location TEXT NOT NULL, total_chargers INTEGER NOT NULL CHECK(total_chargers>0), price_per_kwh REAL NOT NULL DEFAULT 18 CHECK(price_per_kwh>=0));
+CREATE TABLE chargers (charger_id INTEGER PRIMARY KEY AUTOINCREMENT, station_id INTEGER NOT NULL REFERENCES charging_stations(station_id) ON DELETE CASCADE, type TEXT NOT NULL, status TEXT NOT NULL CHECK(status IN ('Available','Busy','Maintenance','Offline')));
+CREATE TABLE reservations (reservation_id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL REFERENCES users(user_id), vehicle_no TEXT NOT NULL REFERENCES vehicles(vehicle_no), station_id INTEGER NOT NULL REFERENCES charging_stations(station_id), slot_time TEXT NOT NULL, status TEXT NOT NULL CHECK(status IN ('Confirmed','Pending','Cancelled','Completed')), remarks TEXT, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE charging_sessions (session_id INTEGER PRIMARY KEY AUTOINCREMENT, reservation_id INTEGER NOT NULL UNIQUE REFERENCES reservations(reservation_id), charger_id INTEGER NOT NULL REFERENCES chargers(charger_id), energy_kwh REAL NOT NULL DEFAULT 0 CHECK(energy_kwh>=0), duration_minutes INTEGER NOT NULL DEFAULT 0, start_time TEXT, end_time TEXT, status TEXT NOT NULL CHECK(status IN ('Waiting','Charging','Completed')));
+CREATE TABLE payments (payment_id INTEGER PRIMARY KEY AUTOINCREMENT, session_id INTEGER NOT NULL UNIQUE REFERENCES charging_sessions(session_id), amount REAL NOT NULL CHECK(amount>=0), method TEXT NOT NULL CHECK(method IN ('UPI','Card','Cash','Net Banking','Wallet')), payment_date TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP, status TEXT NOT NULL CHECK(status IN ('Pending','Paid','Failed')));
+CREATE TABLE maintenance_records (maintenance_id INTEGER PRIMARY KEY AUTOINCREMENT, station_id INTEGER NOT NULL REFERENCES charging_stations(station_id), technician_id INTEGER NOT NULL REFERENCES users(user_id), maintenance_date TEXT NOT NULL, priority TEXT NOT NULL CHECK(priority IN ('Low','Medium','High','Critical')), description TEXT NOT NULL, status TEXT NOT NULL CHECK(status IN ('Scheduled','In Progress','Completed')));
+CREATE INDEX idx_reservations_slot ON reservations(station_id,slot_time);
+CREATE INDEX idx_sessions_status ON charging_sessions(status);
+CREATE INDEX idx_payments_status ON payments(status);
